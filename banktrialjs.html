@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const now = new Date();
+  document.getElementById('dash-date').textContent =
+    ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()};
+  function animateBalance() {
+    const el = document.getElementById('balance');
+    const target = 1847350;
+    let current = 0;
+    const step = target / 60;
+    const interval = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = '₦' + Math.floor(current).toLocaleString('en-NG') + '.00';
+      if (current >= target) clearInterval(interval);
+    }, 16);
+  }
+  setTimeout(animateBalance, 400);
+
+  document.querySelectorAll('[data-target]').forEach(el => {
+    const target = parseFloat(el.dataset.target);
+    const isDecimal = target % 1 !== 0;
+    let current = 0;
+    const step = target / 60;
+    const interval = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = isDecimal ? current.toFixed(1) : Math.floor(current);
+      if (current >= target) { el.textContent = isDecimal ? target.toFixed(1) : target; clearInterval(interval); }
+    }, 20);
+  });
+
+  const transactions = [
+    { icon: '🛒', name: 'Shoprite Purchase', date: 'Today, 11:32 AM', amount: '-₦12,400', type: 'debit' },
+    { icon: '📲', name: 'Transfer from Emeka', date: 'Today, 8:05 AM', amount: '+₦50,000', type: 'credit' },
+    { icon: '⚡', name: 'EEDC Electricity', date: 'Yesterday', amount: '-₦8,000', type: 'debit' },
+    { icon: '📚', name: 'Udemy Course', date: 'Jun 5', amount: '-₦6,200', type: 'debit' },
+  ];
+  const txnList = document.getElementById('txn-list');
+  transactions.forEach(tx => {
+    txnList.innerHTML += `
+      <div class="txn-item">
+        <div class="txn-icon">${tx.icon}</div>
+        <div class="txn-info">
+          <div class="txn-name">${tx.name}</div>
+          <div class="txn-date">${tx.date}</div>
+        </div>
+        <div class="txn-amount ${tx.type}">${tx.amount}</div>
+      </div>`;
+  });
+
+  const monthData = [
+    { m: 'Jan', h: 40 }, { m: 'Feb', h: 65 }, { m: 'Mar', h: 45 },
+    { m: 'Apr', h: 80 }, { m: 'May', h: 55 }, { m: 'Jun', h: 90 }
+  ];
+  const barsEl = document.getElementById('chart-bars');
+  const monthsEl = document.getElementById('chart-months');
+  monthData.forEach(d => {
+    const wrap = document.createElement('div');
+    wrap.className = 'bar-wrap';
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = '0px';
+    wrap.appendChild(bar);
+    barsEl.appendChild(wrap);
+    const label = document.createElement('div');
+    label.className = 'bar-month';
+    label.style.flex = '1'; label.style.textAlign = 'center';
+    label.textContent = d.m;
+    monthsEl.appendChild(label);
+    setTimeout(() => { bar.style.height = d.h + 'px'; }, 600);
+  });
+
+  const modalConfigs = {
+    login: {
+      title: 'Sign In', sub: 'Welcome back to NovaCrest',
+      fields: [
+        { label: 'Account Number or Email', type: 'text', placeholder: 'Enter your account number' },
+        { label: 'Password', type: 'password', placeholder: '••••••••' }
+      ], btn: 'Sign In'
+    },
+    register: {
+      title: 'Open an Account', sub: 'Join 2.4 million Nigerians banking smarter',
+      fields: [
+        { label: 'Full Name', type: 'text', placeholder: 'e.g. Chukwuemeka Obi' },
+        { label: 'Phone Number', type: 'tel', placeholder: '080xxxxxxxx' },
+        { label: 'Email Address', type: 'email', placeholder: 'you@example.com' },
+        { label: 'Create PIN', type: 'password', placeholder: '4-digit PIN' }
+      ], btn: 'Create Account'
+    },
+    transfer: {
+      title: 'Transfer Funds', sub: 'Send money instantly to any Nigerian bank',
+      fields: [
+        { label: 'Recipient Account Number', type: 'text', placehol…
+</body>
+</html>
